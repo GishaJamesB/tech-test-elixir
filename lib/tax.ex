@@ -78,6 +78,6 @@ defmodule Tax do
       end)
 
     IO.inspect("Sales Taxes " <> to_string(Float.round(sales_tax,2)))
-    IO.inspect("Total " <> to_string(Float.round(total)))
+    IO.inspect("Total " <> to_string(Float.round(total, 2)))
   end
 end
