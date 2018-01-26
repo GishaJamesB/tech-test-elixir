@@ -25,3 +25,17 @@ product =
       ]
 Tax.display_tax(product)
 ```
+
+Currently you would be able to test these products only
+
+```
+imported box of chocolates
+imported bottle of perfume
+book
+packet of headache pills
+music cd
+chocolate bar
+bottle of perfume
+```
+
+But in real applications, you can save the products in a database , categorise it , update the product list etc.

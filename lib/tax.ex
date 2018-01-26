@@ -1,6 +1,7 @@
 defmodule Tax do
 
   def products do
+    # This should be in database in practical case
     status = %{imported: 0, unimported: 1}
     [
       %{category: "food", status: status.imported, name: "imported box of chocolates"},
@@ -29,27 +30,37 @@ defmodule Tax do
       name = Map.get(product, :name)
       product_details = get_details(name)
 
-      tax =
-        if Enum.member?(tax_exempted, product_details.category) do
-          0
-        else
-          tax_rate * Map.get(product, :price) * Map.get(product, :quantity)
-        end
+      if not is_nil(product_details) do
+        tax =
+          if Enum.member?(tax_exempted, product_details.category) do
+            0
+          else
+            tax_rate * Map.get(product, :price) * Map.get(product, :quantity)
+          end
 
-      import_duty =
-        if product_details.status == 0 do
-          import_duty_rate * Map.get(product, :price) * Map.get(product, :quantity)
+        import_duty =
+          if product_details.status == 0 do
+            import_duty_rate * Map.get(product, :price) * Map.get(product, :quantity)
+          else
+            0
+          end
+          tax = if (is_float(tax + import_duty)), do: Float.round(tax + import_duty, 2), else: tax + import_duty
+          %{
+            quantity: Map.get(product, :quantity),
+            name: Map.get(product, :name),
+            price: Map.get(product, :price) * Map.get(product, :quantity),
+            final_price: Float.round(Map.get(product, :price) + tax, 2),
+            sales_tax: tax
+          }
         else
-          0
-        end
-        tax = if (is_float(tax + import_duty)), do: Float.round(tax + import_duty, 2), else: tax + import_duty
-        %{
-          quantity: Map.get(product, :quantity),
-          name: Map.get(product, :name),
-          price: Map.get(product, :price),
-          final_price: Float.round(Map.get(product, :price) + tax, 2),
-          sales_tax: tax
-        }
+          %{
+            quantity: Map.get(product, :quantity),
+            name: Map.get(product, :name),
+            price: Map.get(product, :price) * Map.get(product, :quantity),
+            final_price: Float.round(Map.get(product, :price) * Map.get(product, :quantity), 2),
+            sales_tax: 0
+          }
+      end
     end)
   end
 
