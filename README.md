@@ -23,5 +23,5 @@ product =
         %{quantity: 1, name: "packet of headache pills", price: 9.75},
         %{quantity: 1, name: "imported box of chocolates", price: 11.25}
       ]
-Tax.display_tax(product_3)
+Tax.display_tax(product)
 ```
